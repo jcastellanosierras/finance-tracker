@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from './lib/supabase';
 import { Auth } from './components/Auth';
 import { CategoryForm } from './components/CategoryForm';
+import { CategoryList } from './components/CategoryList';
 import { ExpenseForm } from './components/ExpenseForm';
 import { ExpensesList } from './components/ExpensesList';
 import { ExpensesChart } from './components/ExpensesChart';
@@ -29,7 +30,6 @@ function App() {
         fetchCategories(session.user.id);
         fetchExpenses(session.user.id);
       } else {
-        // Limpiar los datos cuando el usuario cierra sesión
         setCategories([]);
         setExpenses([]);
       }
@@ -96,15 +96,26 @@ function App() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">Añadir Categoría</h2>
-            <CategoryForm onCategoryAdded={() => fetchCategories(session.user.id)} />
+          <div className="space-y-8">
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h2 className="text-xl font-semibold mb-4">Categorías</h2>
+              <CategoryForm onCategoryAdded={() => fetchCategories(session.user.id)} />
+              <CategoryList 
+                categories={categories} 
+                onCategoryUpdated={() => {
+                  fetchCategories(session.user.id);
+                  fetchExpenses(session.user.id);
+                }} 
+              />
+            </div>
 
-            <h2 className="text-xl font-semibold mt-8 mb-4">Añadir Gasto</h2>
-            <ExpenseForm
-              categories={categories}
-              onExpenseAdded={() => fetchExpenses(session.user.id)}
-            />
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h2 className="text-xl font-semibold mb-4">Añadir Gasto</h2>
+              <ExpenseForm
+                categories={categories}
+                onExpenseAdded={() => fetchExpenses(session.user.id)}
+              />
+            </div>
           </div>
 
           <div className="space-y-8">
@@ -129,7 +140,11 @@ function App() {
               {loading ? (
                 <p>Cargando gastos...</p>
               ) : (
-                <ExpensesList expenses={expenses} />
+                <ExpensesList 
+                  expenses={expenses} 
+                  categories={categories}
+                  onExpenseUpdated={() => fetchExpenses(session.user.id)} 
+                />
               )}
             </div>
           </div>
