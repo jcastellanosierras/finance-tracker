@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { Link, useNavigate } from 'react-router';
+import { signin, signInWithGoogle } from '../modules/auth/signin';
+import { GoogleIcon } from './icons/Google';
 
 export function SignIn() {
   const [email, setEmail] = useState('');
@@ -7,21 +9,25 @@ export function SignIn() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { error } = await signin(email, password);
 
     if (error) {
       setError(error.message);
     }
     setLoading(false);
+    navigate('/');
   };
+
+  const handleSignInWithGoogle = async () => {
+    await signInWithGoogle()
+  }
 
   return (
     <form onSubmit={handleSubmit}>
@@ -54,13 +60,28 @@ export function SignIn() {
           required
         />
       </div>
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:opacity-50"
-      >
-        {loading ? 'Cargando...' : 'Iniciar Sesión'}
-      </button>
+
+      <div className='flex flex-col gap-2'>
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:opacity-50"
+        >
+          {loading ? 'Cargando...' : 'Iniciar Sesión'}
+        </button>
+        <button
+          type="button"
+          onClick={handleSignInWithGoogle}
+          className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 border border-gray-300 py-2 px-4 rounded hover:bg-gray-50"
+        >
+          <GoogleIcon className='w-5 h-5' />
+          Continuar con Google
+        </button>
+      </div>
+      <div className="mt-4">
+        ¿No tienes cuenta? {" "}
+        <Link to="/signup" className="text-blue-500 hover:text-blue-600">Regístrate</Link>
+      </div>
     </form>
   );
 }
