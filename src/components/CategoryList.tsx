@@ -2,13 +2,8 @@ import { useState } from 'react';
 import { Pencil, Trash2, X, Check } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
-interface Category {
-  id: string;
-  name: string;
-}
-
 interface Props {
-  categories: Category[];
+  categories: ExpenseTracker.Category[];
   onCategoryUpdated: () => void;
 }
 
@@ -16,7 +11,7 @@ export function CategoryList({ categories, onCategoryUpdated }: Props) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
 
-  const handleEdit = (category: Category) => {
+  const handleEdit = (category: ExpenseTracker.Category) => {
     setEditingId(category.id);
     setEditName(category.name);
   };

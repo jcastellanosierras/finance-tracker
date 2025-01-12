@@ -4,23 +4,9 @@ import { es } from 'date-fns/locale';
 import { Pencil, Trash2, X, Check } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
-interface Category {
-  id: string;
-  name: string;
-}
-
-interface Expense {
-  id: string;
-  amount: number;
-  description: string;
-  date: string;
-  category: { name: string };
-  category_id: string;
-}
-
 interface Props {
-  expenses: Expense[];
-  categories: Category[];
+  expenses: ExpenseTracker.Expense[];
+  categories: ExpenseTracker.Category[];
   onExpenseUpdated: () => void;
 }
 
@@ -31,7 +17,7 @@ export function ExpensesList({ expenses, categories, onExpenseUpdated }: Props) 
   const [editDate, setEditDate] = useState('');
   const [editCategoryId, setEditCategoryId] = useState('');
 
-  const handleEdit = (expense: Expense) => {
+  const handleEdit = (expense: ExpenseTracker.Expense) => {
     setEditingId(expense.id);
     setEditAmount(expense.amount.toString());
     setEditDescription(expense.description);
