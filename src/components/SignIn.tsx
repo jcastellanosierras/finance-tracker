@@ -71,7 +71,6 @@ export function SignIn() {
         </button>
         <button
           type="button"
-          disabled
           onClick={handleSignInWithGoogle}
           className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 border border-gray-300 py-2 px-4 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
