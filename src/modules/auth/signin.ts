@@ -13,6 +13,9 @@ export const signInWithGoogle = async () => {
     provider: 'google',
     options: {
       redirectTo: getURL(),
+      queryParams: {
+        prompt: 'select_account',
+      },
     },
   });
 }
