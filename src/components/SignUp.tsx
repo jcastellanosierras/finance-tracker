@@ -40,10 +40,17 @@ export function SignUp() {
         </div>
       )}
       <div className="mb-4">
+        <p className='text-gray-500 text-sm mb-4'>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 inline-block mr-1 text-gray-500">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+          </svg>
+          De momento solo está habilitado el inicio de sesión con Google.
+        </p>
         <label className="block text-gray-700 text-sm font-bold mb-2">
           Email
         </label>
         <input
+          disabled
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -56,6 +63,7 @@ export function SignUp() {
           Contraseña
         </label>
         <input
+          disabled
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -66,7 +74,7 @@ export function SignUp() {
       <div className='flex flex-col gap-2'>
         <button
           type="submit"
-          disabled={loading}
+          disabled
           className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:opacity-50"
         >
           {loading ? 'Cargando...' : 'Registrarse'}
