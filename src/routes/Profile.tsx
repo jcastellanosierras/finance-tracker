@@ -1,65 +1,65 @@
-import { useState } from 'react';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../hooks/useAuth';
-import { ArrowLeft } from 'lucide-react';
-import { Link, useNavigate } from 'react-router';
+import { useState } from 'react'
+import { supabase } from '../lib/supabase'
+import { useAuth } from '../hooks/useAuth'
+import { ArrowLeft } from 'lucide-react'
+import { Link, useNavigate } from 'react-router'
 
 export function Profile() {
-  const { session } = useAuth();
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState(false);
+  const { session } = useAuth()
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState('')
+  const [error, setError] = useState(false)
   const [formData, setFormData] = useState({
     email: session?.user.email || '',
     password: '',
     newPassword: '',
     confirmPassword: '',
-  });
+  })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
-    });
-  };
+    })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage('');
+    e.preventDefault()
+    setLoading(true)
+    setMessage('')
 
     if (formData.newPassword !== formData.confirmPassword) {
-      setMessage('Las contraseñas no coinciden');
-      setError(true);
-      setLoading(false);
-      return;
+      setMessage('Las contraseñas no coinciden')
+      setError(true)
+      setLoading(false)
+      return
     }
 
     try {
       if (formData.newPassword) {
         const { error } = await supabase.auth.updateUser({
           password: formData.newPassword
-        });
+        })
 
         if (error) {
-          setMessage("No se ha podido actualizar la contraseña, inténtalo de nuevo más tarde.")
-          setError(true);
-          setLoading(false);
-          return;
+          setMessage('No se ha podido actualizar la contraseña, inténtalo de nuevo más tarde.')
+          setError(true)
+          setLoading(false)
+          return
         }
 
-        setMessage('Contraseña actualizada correctamente');
-        setError(false);
-        navigate("/");
+        setMessage('Contraseña actualizada correctamente')
+        setError(false)
+        navigate('/')
       }
     } catch (error: unknown) {
-      setMessage((error as Error).message);
-      setError(true);
+      setMessage((error as Error).message)
+      setError(true)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -137,5 +137,5 @@ export function Profile() {
         </div>
       </main>
     </div>
-  );
+  )
 }

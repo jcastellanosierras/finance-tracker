@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { supabase } from '../lib/supabase';
+import React, { useState } from 'react'
+import { supabase } from '../lib/supabase'
 
 interface Category {
   id: string;
@@ -12,21 +12,21 @@ interface ExpenseFormProps {
 }
 
 export function ExpenseForm({ categories, onExpenseAdded }: ExpenseFormProps) {
-  const [amount, setAmount] = useState('');
-  const [description, setDescription] = useState('');
-  const [categoryId, setCategoryId] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [loading, setLoading] = useState(false);
+  const [amount, setAmount] = useState('')
+  const [description, setDescription] = useState('')
+  const [categoryId, setCategoryId] = useState('')
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0])
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+    e.preventDefault()
+    setLoading(true)
 
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser()
     
     if (!user) {
-      setLoading(false);
-      return;
+      setLoading(false)
+      return
     }
 
     const { error } = await supabase
@@ -37,16 +37,16 @@ export function ExpenseForm({ categories, onExpenseAdded }: ExpenseFormProps) {
         category_id: categoryId,
         date,
         user_id: user.id
-      }]);
+      }])
 
     if (!error) {
-      setAmount('');
-      setDescription('');
-      setCategoryId('');
-      onExpenseAdded();
+      setAmount('')
+      setDescription('')
+      setCategoryId('')
+      onExpenseAdded()
     }
-    setLoading(false);
-  };
+    setLoading(false)
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -108,5 +108,5 @@ export function ExpenseForm({ categories, onExpenseAdded }: ExpenseFormProps) {
         {loading ? 'Guardando...' : 'Añadir Gasto'}
       </button>
     </form>
-  );
+  )
 }

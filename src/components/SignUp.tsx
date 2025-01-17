@@ -1,32 +1,32 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router';
-import { signup } from '../modules/auth/signup';
-import { signInWithGoogle } from '../modules/auth/signin';
-import { GoogleIcon } from './icons/Google';
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router'
+import { signup } from '../modules/auth/signup'
+import { signInWithGoogle } from '../modules/auth/signin'
+import { GoogleIcon } from './icons/Google'
 
 export function SignUp() {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
 
-    const { error } = await signup(email, password);
+    const { error } = await signup(email, password)
 
     if (error) {
-      setError(error.message);
-      setLoading(false);
-      return;
+      setError(error.message)
+      setLoading(false)
+      return
     }
 
-    navigate('/');
-    setLoading(false);
-  };
+    navigate('/')
+    setLoading(false)
+  }
 
   const handleSignInWithGoogle = async () => {
     await signInWithGoogle()
@@ -89,9 +89,9 @@ export function SignUp() {
         </button>
       </div>
       <div className="mt-4">
-        ¿Ya tienes cuenta? {" "}
+        ¿Ya tienes cuenta? {' '}
         <Link to="/signin" className="text-blue-500 hover:text-blue-600">Inicia sesión</Link>
       </div>
     </form>
-  );
+  )
 }

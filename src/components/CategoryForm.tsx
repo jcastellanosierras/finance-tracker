@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import { supabase } from '../lib/supabase';
-import { PlusCircle } from 'lucide-react';
+import React, { useState } from 'react'
+import { supabase } from '../lib/supabase'
+import { PlusCircle } from 'lucide-react'
 
 export function CategoryForm({ onCategoryAdded }: { onCategoryAdded: () => void }) {
-  const [name, setName] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+    e.preventDefault()
+    setLoading(true)
 
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser()
     
     if (!user) {
-      setLoading(false);
-      return;
+      setLoading(false)
+      return
     }
 
     const { error } = await supabase
@@ -22,14 +22,14 @@ export function CategoryForm({ onCategoryAdded }: { onCategoryAdded: () => void 
       .insert([{ 
         name,
         user_id: user.id 
-      }]);
+      }])
 
     if (!error) {
-      setName('');
-      onCategoryAdded();
+      setName('')
+      onCategoryAdded()
     }
-    setLoading(false);
-  };
+    setLoading(false)
+  }
 
   return (
     <form onSubmit={handleSubmit} className="flex gap-2">
@@ -49,5 +49,5 @@ export function CategoryForm({ onCategoryAdded }: { onCategoryAdded: () => void 
         <PlusCircle className="w-5 h-5" />
       </button>
     </form>
-  );
+  )
 }

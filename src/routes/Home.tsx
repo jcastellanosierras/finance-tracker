@@ -1,39 +1,39 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
-import { CategoryForm } from '../components/CategoryForm';
-import { CategoryList } from '../components/CategoryList';
-import { ExpenseForm } from '../components/ExpenseForm';
-import { ExpensesList } from '../components/ExpensesList';
-import { ExpensesChart } from '../components/ExpensesChart';
-import { ExportButton } from '../components/ExportButton';
-import { ChevronDown, ChevronUp, LogOut, User } from 'lucide-react';
-import { Link } from 'react-router';
-import { useAuth } from '../hooks/useAuth';
-import { logout } from '../modules/auth/logout';
+import { useEffect, useState } from 'react'
+import { supabase } from '../lib/supabase'
+import { CategoryForm } from '../components/CategoryForm'
+import { CategoryList } from '../components/CategoryList'
+import { ExpenseForm } from '../components/ExpenseForm'
+import { ExpensesList } from '../components/ExpensesList'
+import { ExpensesChart } from '../components/ExpensesChart'
+import { ExportButton } from '../components/ExportButton'
+import { ChevronDown, ChevronUp, LogOut, User } from 'lucide-react'
+import { Link } from 'react-router'
+import { useAuth } from '../hooks/useAuth'
+import { logout } from '../modules/auth/logout'
 
 export function Home() {
-  const [categories, setCategories] = useState<ExpenseTracker.Category[]>([]);
-  const [expenses, setExpenses] = useState<ExpenseTracker.Expense[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [categories, setCategories] = useState<ExpenseTracker.Category[]>([])
+  const [expenses, setExpenses] = useState<ExpenseTracker.Expense[]>([])
+  const [loading, setLoading] = useState(true)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const { session } = useAuth();
+  const { session } = useAuth()
 
   useEffect(() => {
     if (session) {
-      fetchCategories(session.user.id);
-      fetchExpenses(session.user.id);
+      fetchCategories(session.user.id)
+      fetchExpenses(session.user.id)
     }
-  }, [session]);
+  }, [session])
 
   const fetchCategories = async (userId: string) => {
     const { data } = await supabase
       .from('categories')
       .select('*')
       .eq('user_id', userId)
-      .order('name');
-    setCategories(data || []);
-  };
+      .order('name')
+    setCategories(data || [])
+  }
 
   const fetchExpenses = async (userId: string) => {
     const { data } = await supabase
@@ -43,27 +43,27 @@ export function Home() {
         category:categories(name)
       `)
       .eq('user_id', userId)
-      .order('date', { ascending: false });
-    setExpenses(data || []);
-    setLoading(false);
-  };
+      .order('date', { ascending: false })
+    setExpenses(data || [])
+    setLoading(false)
+  }
 
   const handleSignOut = () => {
-    logout();
-  };
+    logout()
+  }
 
   const categoryTotals = expenses.reduce((acc: { name: string; value: number }[], expense: ExpenseTracker.Expense) => {
-    const categoryName = expense.category.name;
-    const existingCategory = acc.find(c => c.name === categoryName);
+    const categoryName = expense.category.name
+    const existingCategory = acc.find(c => c.name === categoryName)
     if (existingCategory) {
-      existingCategory.value += expense.amount;
+      existingCategory.value += expense.amount
     } else {
-      acc.push({ name: categoryName, value: expense.amount });
+      acc.push({ name: categoryName, value: expense.amount })
     }
-    return acc;
-  }, []);
+    return acc
+  }, [])
 
-  const totalExpenses = expenses.reduce((sum: number, expense: ExpenseTracker.Expense) => sum + expense.amount, 0);
+  const totalExpenses = expenses.reduce((sum: number, expense: ExpenseTracker.Expense) => sum + expense.amount, 0)
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -119,8 +119,8 @@ export function Home() {
               <CategoryList 
                 categories={categories} 
                 onCategoryUpdated={() => {
-                  fetchCategories(session!.user.id);
-                  fetchExpenses(session!.user.id);
+                  fetchCategories(session!.user.id)
+                  fetchExpenses(session!.user.id)
                 }} 
               />
             </div>
@@ -167,5 +167,5 @@ export function Home() {
         </div>
       </main>
     </div>
-  );
+  )
 }

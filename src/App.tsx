@@ -1,9 +1,9 @@
-import { BrowserRouter, Route, Routes } from 'react-router';
-import { Home } from './routes/Home';
-import { Profile } from './routes/Profile';
-import { ProtectedRoute } from './routes/ProtectedRoute';
-import { SignInPage } from './routes/SignIn';
-import { SignUpPage } from './routes/SignUp';
+import { BrowserRouter, Route, Routes } from 'react-router'
+import { Home } from './routes/Home'
+import { Profile } from './routes/Profile'
+import { ProtectedRoute } from './routes/ProtectedRoute'
+import { SignInPage } from './routes/SignIn'
+import { SignUpPage } from './routes/SignUp'
 
 export function App() {
   return (
@@ -15,5 +15,5 @@ export function App() {
         <Route path="/signup" element={<SignUpPage />} />
       </Routes>
     </BrowserRouter>
-  );
+  )
 }

@@ -1,11 +1,11 @@
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts'
 
 interface CategoryTotal {
   name: string;
   value: number;
 }
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8']
 
 export function ExpensesChart({ data }: { data: CategoryTotal[] }) {
   return (
@@ -44,5 +44,5 @@ export function ExpensesChart({ data }: { data: CategoryTotal[] }) {
         </ResponsiveContainer>
       </div>
     </div>
-  );
+  )
 }

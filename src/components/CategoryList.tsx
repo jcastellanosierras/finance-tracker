@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Pencil, Trash2, X, Check } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { useState } from 'react'
+import { Pencil, Trash2, X, Check } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 
 interface Props {
   categories: ExpenseTracker.Category[];
@@ -8,40 +8,40 @@ interface Props {
 }
 
 export function CategoryList({ categories, onCategoryUpdated }: Props) {
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editName, setEditName] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editName, setEditName] = useState('')
 
   const handleEdit = (category: ExpenseTracker.Category) => {
-    setEditingId(category.id);
-    setEditName(category.name);
-  };
+    setEditingId(category.id)
+    setEditName(category.name)
+  }
 
   const handleUpdate = async (id: string) => {
     const { error } = await supabase
       .from('categories')
       .update({ name: editName })
-      .eq('id', id);
+      .eq('id', id)
 
     if (!error) {
-      setEditingId(null);
-      onCategoryUpdated();
+      setEditingId(null)
+      onCategoryUpdated()
     }
-  };
+  }
 
   const handleDelete = async (id: string) => {
     if (!confirm('¿Estás seguro de que quieres eliminar esta categoría? Se eliminarán también todos los gastos asociados.')) {
-      return;
+      return
     }
 
     const { error } = await supabase
       .from('categories')
       .delete()
-      .eq('id', id);
+      .eq('id', id)
 
     if (!error) {
-      onCategoryUpdated();
+      onCategoryUpdated()
     }
-  };
+  }
 
   return (
     <div className="mt-4 space-y-2">
@@ -93,5 +93,5 @@ export function CategoryList({ categories, onCategoryUpdated }: Props) {
         </div>
       ))}
     </div>
-  );
+  )
 }

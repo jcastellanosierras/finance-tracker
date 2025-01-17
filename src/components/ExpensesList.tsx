@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { Pencil, Trash2, X, Check } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { useState } from 'react'
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
+import { Pencil, Trash2, X, Check } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 
 interface Props {
   expenses: ExpenseTracker.Expense[];
@@ -11,19 +11,19 @@ interface Props {
 }
 
 export function ExpensesList({ expenses, categories, onExpenseUpdated }: Props) {
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editAmount, setEditAmount] = useState('');
-  const [editDescription, setEditDescription] = useState('');
-  const [editDate, setEditDate] = useState('');
-  const [editCategoryId, setEditCategoryId] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editAmount, setEditAmount] = useState('')
+  const [editDescription, setEditDescription] = useState('')
+  const [editDate, setEditDate] = useState('')
+  const [editCategoryId, setEditCategoryId] = useState('')
 
   const handleEdit = (expense: ExpenseTracker.Expense) => {
-    setEditingId(expense.id);
-    setEditAmount(expense.amount.toString());
-    setEditDescription(expense.description);
-    setEditDate(expense.date);
-    setEditCategoryId(expense.category_id);
-  };
+    setEditingId(expense.id)
+    setEditAmount(expense.amount.toString())
+    setEditDescription(expense.description)
+    setEditDate(expense.date)
+    setEditCategoryId(expense.category_id)
+  }
 
   const handleUpdate = async (id: string) => {
     const { error } = await supabase
@@ -34,28 +34,28 @@ export function ExpensesList({ expenses, categories, onExpenseUpdated }: Props) 
         date: editDate,
         category_id: editCategoryId
       })
-      .eq('id', id);
+      .eq('id', id)
 
     if (!error) {
-      setEditingId(null);
-      onExpenseUpdated();
+      setEditingId(null)
+      onExpenseUpdated()
     }
-  };
+  }
 
   const handleDelete = async (id: string) => {
     if (!confirm('¿Estás seguro de que quieres eliminar este gasto?')) {
-      return;
+      return
     }
 
     const { error } = await supabase
       .from('expenses')
       .delete()
-      .eq('id', id);
+      .eq('id', id)
 
     if (!error) {
-      onExpenseUpdated();
+      onExpenseUpdated()
     }
-  };
+  }
 
   return (
     <div className="space-y-4">
@@ -182,6 +182,6 @@ export function ExpensesList({ expenses, categories, onExpenseUpdated }: Props) 
         </table>
       </div>
     </div>
-  );
+  )
   
 }

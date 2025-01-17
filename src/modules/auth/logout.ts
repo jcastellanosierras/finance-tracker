@@ -1,5 +1,5 @@
-import { supabase } from "../../lib/supabase";
+import { supabase } from '../../lib/supabase'
 
 export const logout = async () => {
-  return await supabase.auth.signOut();
-};
+  return await supabase.auth.signOut()
+}
