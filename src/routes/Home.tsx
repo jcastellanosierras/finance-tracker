@@ -9,19 +9,21 @@ import { ExpensesChart } from '../components/ExpensesChart'
 import { ExportButton } from '../components/ExportButton'
 import { useAuth } from '../hooks/useAuth'
 import { useCategories } from '../hooks/useCategories'
-import { useExpenses } from '../hooks/useExpenses'
+import { DateRangeOption, useExpenses } from '../hooks/useExpenses'
 import { logout } from '../modules/auth/logout'
 
 export function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { session } = useAuth()
   const { categories, refreshCategories } = useCategories(session?.user.id)
-  const { 
-    expenses, 
-    loading, 
-    refreshExpenses, 
-    categoryTotals, 
-    totalExpenses 
+  const {
+    expenses,
+    loading,
+    refreshExpenses,
+    categoryTotals,
+    totalExpenses,
+    setDateRangeByOption,
+    dateRange,
   } = useExpenses(session?.user.id)
 
   const handleSignOut = () => {
@@ -32,7 +34,9 @@ export function Home() {
     <div className="min-h-screen bg-gray-100">
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900">Control de Gastos</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Control de Gastos
+          </h1>
           <div className="relative">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -50,21 +54,27 @@ export function Home() {
 
             {isMenuOpen && (
               <>
-                <div className='fixed z-10 inset-0 w-full h-full' onClick={() => setIsMenuOpen(false)} />
+                <div
+                  className="fixed z-10 inset-0 w-full h-full"
+                  onClick={() => setIsMenuOpen(false)}
+                />
                 <div className="absolute z-20 right-0 mt-2 w-48 bg-gray-50 rounded-md shadow-lg">
-                  <Link to="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full">
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full"
+                  >
                     <User className="w-4 h-4" />
                     Usuario
                   </Link>
 
-                <div className="border-b border-gray-200"></div>
+                  <div className="border-b border-gray-200"></div>
 
-                <button
-                  onClick={handleSignOut}
-                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Cerrar sesión
+                  <button
+                    onClick={handleSignOut}
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Cerrar sesión
                   </button>
                 </div>
               </>
@@ -74,17 +84,51 @@ export function Home() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="w-full mb-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="flex flex-col gap-1">
+            <span>Desde</span>
+            <div className="w-full bg-white border border-gray-300 rounded-md py-2 px-4 text-gray-700">
+              <span>{dateRange.start}</span>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span>Hasta</span>
+            <div className="w-full bg-white border border-gray-300 rounded-md py-2 px-4 text-gray-700">
+              <span>{dateRange.end}</span>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1 col-span-2">
+            <span>Rango</span>
+            <select
+              onChange={(e) =>
+                setDateRangeByOption(e.target.value as DateRangeOption)
+              }
+              className="w-full bg-white border border-gray-300 rounded-md py-2 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              defaultValue="current_month"
+            >
+              <option value="current_month">Este mes</option>
+              <option value="last_month">Último mes</option>
+              <option value="last_3_months">Últimos 3 meses</option>
+              <option value="last_6_months">Últimos 6 meses</option>
+              <option value="current_year">Este año</option>
+              <option value="last_year">Año anterior</option>
+            </select>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-8">
             <div className="bg-white p-6 rounded-lg shadow">
               <h2 className="text-xl font-semibold mb-4">Categorías</h2>
               <CategoryForm onCategoryAdded={refreshCategories} />
-              <CategoryList 
-                categories={categories} 
+              <CategoryList
+                categories={categories}
                 onCategoryUpdated={() => {
                   refreshCategories()
                   refreshExpenses()
-                }} 
+                }}
               />
             </div>
 
@@ -104,7 +148,7 @@ export function Home() {
                 <p className="text-2xl font-bold text-blue-600">
                   {new Intl.NumberFormat('es-ES', {
                     style: 'currency',
-                    currency: 'EUR'
+                    currency: 'EUR',
                   }).format(totalExpenses)}
                 </p>
               </div>
@@ -119,10 +163,10 @@ export function Home() {
               {loading ? (
                 <p>Cargando gastos...</p>
               ) : (
-                <ExpensesList 
-                  expenses={expenses} 
+                <ExpensesList
+                  expenses={expenses}
                   categories={categories}
-                  onExpenseUpdated={refreshExpenses} 
+                  onExpenseUpdated={refreshExpenses}
                 />
               )}
             </div>
