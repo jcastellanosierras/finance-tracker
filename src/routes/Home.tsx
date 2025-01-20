@@ -27,7 +27,7 @@ export function Home() {
       <Header />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="w-full mb-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="w-full mb-2 grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="flex flex-col gap-1">
             <span>Desde</span>
             <div className="w-full bg-white border border-gray-300 rounded-md py-2 px-4 text-gray-700">
